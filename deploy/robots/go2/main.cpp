@@ -7,6 +7,16 @@ std::unique_ptr<LowCmd_t> FSMState::lowcmd = nullptr;
 std::shared_ptr<LowState_t> FSMState::lowstate = nullptr;
 std::shared_ptr<Keyboard> FSMState::keyboard = nullptr;
 
+void printAllFsmNames()
+{
+    const auto& fsmMap = getFsmMap();
+
+    std::cout << "Registered FSM states (" << fsmMap.size() << "):\n";
+    for (const auto& [name, factory] : fsmMap) {
+        std::cout << "  - " << name << '\n';
+    }
+}
+
 void init_fsm_state()
 {
     auto lowcmd_sub = std::make_shared<unitree::robot::go2::subscription::LowCmd>();
@@ -35,6 +45,7 @@ int main(int argc, char** argv)
     // Unitree DDS Config
     unitree::robot::ChannelFactory::Instance()->Init(0, vm["network"].as<std::string>());
 
+    printAllFsmNames();
     init_fsm_state();
 
     // Initialize FSM
